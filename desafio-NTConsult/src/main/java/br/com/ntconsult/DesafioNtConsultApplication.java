@@ -3,7 +3,6 @@ package br.com.ntconsult;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +14,21 @@ import br.com.ntconsult.domain.Associado;
 import br.com.ntconsult.domain.Sessao;
 import br.com.ntconsult.domain.Voto;
 import br.com.ntconsult.enun.Valor;
-import br.com.ntconsult.repository.AssociadoRepository;
-import br.com.ntconsult.repository.SessaoRepository;
-import br.com.ntconsult.repository.VotoRepository;
+import br.com.ntconsult.service.AssociadoService;
+import br.com.ntconsult.service.SessaoService;
+import br.com.ntconsult.service.VotoService;
 
 @SpringBootApplication
 public class DesafioNtConsultApplication implements CommandLineRunner {
 
 	@Autowired
-	private AssociadoRepository associadoRepository;
+	private AssociadoService associadoService;
 
 	@Autowired
-	private SessaoRepository sessaoRepository;
+	private SessaoService sessaoService;
 
 	@Autowired
-	private VotoRepository votoRepository;
+	private VotoService votoService;
 
 	int duracao = 10;
 	String pauta = "pauta_";
@@ -46,8 +45,7 @@ public class DesafioNtConsultApplication implements CommandLineRunner {
 
 		for (Long i = 1l; i <= 10; i++) {
 			Associado a = new Associado(i, "Associado_".concat(String.valueOf(i)));
-			Associado aSave = associadoRepository.save(a);
-			System.out.println(aSave);
+			associadoService.save(a);			
 		}
 
 		for (Long i = 1l; i <= 10; i++) {
@@ -60,13 +58,11 @@ public class DesafioNtConsultApplication implements CommandLineRunner {
 
 			Sessao s = new Sessao(i, pautaConcat, dataAberturaSessao, duracao);
 
-			Sessao sSave = sessaoRepository.save(s);
-
-			System.out.println(sSave.toString());
+			sessaoService.save(s);			
 		}
 
-		List<Associado> listaDeAssociados = associadoRepository.findAll();
-		List<Sessao> listaDeSessoes = sessaoRepository.findAll();
+		List<Associado> listaDeAssociados = associadoService.findAll();
+		List<Sessao> listaDeSessoes = sessaoService.findAll();
 		
 		Long posicao;
 		
@@ -92,7 +88,7 @@ public class DesafioNtConsultApplication implements CommandLineRunner {
 						Valor.NAO);
 			}
 						
-			votoRepository.save(voto);
+			votoService.save(voto);
 		}
 
 	}
