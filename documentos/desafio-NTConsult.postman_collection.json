@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "a1acde12-612a-49f3-893d-4df33c4f334f",
+		"name": "desafio-NTConsult",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "associados",
+			"item": [
+				{
+					"name": "findAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/associados",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"associados"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/associados",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"associados"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pautas",
+			"item": [
+				{
+					"name": "cadastrarNovaPauta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"titulo\":\"Pauta 1\",\n\t\"descricao\":\"Descrição da Pauta 1\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/pautas",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pautas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "votar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"associadoId\": 1,\n    \"valorDoVoto\":\"SIM\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/pautas/1/votos",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pautas",
+								"1",
+								"votos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "abrirSessaoEmUmaPauta",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/pautas/1/sessoes/60",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pautas",
+								"1",
+								"sessoes",
+								"60"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
