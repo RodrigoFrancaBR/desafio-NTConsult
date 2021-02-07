@@ -3,14 +3,27 @@ package br.com.ntconsult.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TB_SESSAO")
 public class Sessao implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String pauta;
+	@Column(name = "dt_abertura")
 	private LocalDateTime dataDeAbertura;
+	@Column(name = "qt_duracao")
 	private int duracao;
 
 	public Sessao() {
@@ -79,6 +92,12 @@ public class Sessao implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Sessao [id=" + id + ", pauta=" + pauta + ", dataDeAbertura=" + dataDeAbertura + ", duracao=" + duracao
+				+ "]";
 	}
 
 }

@@ -2,23 +2,47 @@ package br.com.ntconsult.domain;
 
 import java.io.Serializable;
 
-public class Votacao implements Serializable{
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import br.com.ntconsult.enun.Valor;
+
+@Entity
+@Table(name = "TB_VOTO")
+public class Voto implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToOne
+	@JoinColumn(name = "associado_id")
 	private Associado associado;
+	
+	@ManyToOne
+	@JoinColumn(name = "sessao_id")
 	private Sessao sessao;
-
-	public Votacao() {
+	
+	String valor; 
+	
+	public Voto() {
 	}
 
-	public Votacao(Long id, Associado associado, Sessao sessao) {
+	public Voto(Long id, Associado associado, Sessao sessao, Valor valor) {
 		super();
 		this.id = id;
 		this.associado = associado;
 		this.sessao = sessao;
+		this.valor = valor.getValor();
 	}
 
 	public Long getId() {
@@ -43,6 +67,14 @@ public class Votacao implements Serializable{
 
 	public void setSessao(Sessao sessao) {
 		this.sessao = sessao;
+	}	
+
+	public Valor getValor() {
+		return Valor.getValor(valor);
+	}
+
+	public void setValor(Valor valor) {
+		this.valor = valor.getValor();
 	}
 
 	@Override
@@ -61,7 +93,7 @@ public class Votacao implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Votacao other = (Votacao) obj;
+		Voto other = (Voto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
