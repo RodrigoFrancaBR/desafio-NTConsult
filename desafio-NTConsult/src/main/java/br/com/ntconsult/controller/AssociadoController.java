@@ -1,8 +1,7 @@
 package br.com.ntconsult.controller;
 
-import java.util.List;
+import java.util.Collection;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,7 @@ import br.com.ntconsult.service.AssociadoService;
 @RestController
 @RequestMapping(value = "/associados")
 public class AssociadoController implements AssociadoAPI {
-	
+
 	private AssociadoService service;
 
 	public AssociadoController(AssociadoService service) {
@@ -23,15 +22,36 @@ public class AssociadoController implements AssociadoAPI {
 	}
 
 	@Override
-	@GetMapping
-	public List<Associado> findAll() {
-		return service.findAll();
+	@PostMapping
+	public void cadastrarAssociado(@RequestBody Associado Associado) {
+		service.cadastrarAssociado(Associado);
 	}
 
 	@Override
-	@PostMapping
-	public void save(@RequestBody Associado associado) {
-		service.save(associado);		
+	public Collection<Associado> obterAssociados() {
+		
+		return null;
 	}
+
+	@Override
+	public Associado obterAssociadoPorId(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void alterarAssociado(Long id, Associado Associado) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void excluirAssociado(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
 
 }

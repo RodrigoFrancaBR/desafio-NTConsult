@@ -1,11 +1,19 @@
 package br.com.ntconsult.api;
 
-import java.util.List;
+import java.util.Collection;
 
 import br.com.ntconsult.domain.Associado;
 
 public interface AssociadoAPI {
-	List<Associado> findAll();
 
-	void save(Associado associado);
+	Collection<Associado> obterAssociados();
+
+	void cadastrarAssociado(Associado Associado);	
+
+	Associado obterAssociadoPorId(Long id);
+
+	void alterarAssociado(Long id, Associado Associado);
+
+	void excluirAssociado(Long id);
+
 }

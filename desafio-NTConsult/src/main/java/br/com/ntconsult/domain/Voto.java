@@ -10,39 +10,37 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.com.ntconsult.enun.Valor;
+import br.com.ntconsult.enun.ValorDoVoto;
 
 @Entity
 @Table(name = "TB_VOTO")
-public class Voto implements Serializable{
+public class Voto implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "pauta_id")
+	private Pauta pauta;
+
 	@ManyToOne
 	@JoinColumn(name = "associado_id")
 	private Associado associado;
-	
-	@ManyToOne
-	@JoinColumn(name = "sessao_id")
-	private Sessao sessao;
-	
-	String valor; 
-	
+
+	String valorDoVoto;
+
 	public Voto() {
 	}
 
-	public Voto(Long id, Associado associado, Sessao sessao, Valor valor) {
-		super();
-		this.id = id;
+	public Voto(Pauta pauta, Associado associado, ValorDoVoto valor) {
+		this.pauta = pauta;
 		this.associado = associado;
-		this.sessao = sessao;
-		this.valor = valor.getValor();
+		this.valorDoVoto = valor.getValorDoVoto();
 	}
 
 	public Long getId() {
@@ -61,20 +59,20 @@ public class Voto implements Serializable{
 		this.associado = associado;
 	}
 
-	public Sessao getSessao() {
-		return sessao;
+	public Pauta getPauta() {
+		return pauta;
 	}
 
-	public void setSessao(Sessao sessao) {
-		this.sessao = sessao;
-	}	
-
-	public Valor getValor() {
-		return Valor.getValor(valor);
+	public void setPauta(Pauta pauta) {
+		this.pauta = pauta;
 	}
 
-	public void setValor(Valor valor) {
-		this.valor = valor.getValor();
+	public ValorDoVoto getValorDoVoto() {
+		return ValorDoVoto.obterValorDoVotoPorUm(valorDoVoto);
+	}
+
+	public void setValorDoVoto(ValorDoVoto valorDoVoto) {
+		this.valorDoVoto = valorDoVoto.getValorDoVoto();
 	}
 
 	@Override
@@ -101,7 +99,5 @@ public class Voto implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
 
 }
