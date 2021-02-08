@@ -1,7 +1,7 @@
 package br.com.ntconsult.enun;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public enum ValorDoVoto {
 	SIM("Sim"), NAO("Não");
@@ -17,18 +17,8 @@ public enum ValorDoVoto {
 	}
 
 	public static ValorDoVoto obterValorDoVotoPorUm(String valor) {
-		
-		Stream<ValorDoVoto> valorStream = 
-				Arrays.asList(ValorDoVoto.values())
-				.parallelStream()
-				.filter(e -> e.getValorDoVoto().equals(valor));
-		
-		if (valorStream.count() > 0) {		
-			return valorStream.findFirst().get();
-			
-		} else {
-			throw new IllegalArgumentException("Valor do voto informado deve ser Sim ou Não");
-		}
+		return Arrays.asList(ValorDoVoto.values()).parallelStream().filter(e -> e.getValorDoVoto().equals(valor))
+				.collect(Collectors.toList()).get(0);
 	}
 
 }

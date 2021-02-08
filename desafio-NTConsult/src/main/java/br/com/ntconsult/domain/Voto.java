@@ -67,7 +67,7 @@ public class Voto implements Serializable {
 		this.pauta = pauta;
 	}
 
-	public ValorDoVoto getValorDoVoto() {
+	public ValorDoVoto getValorDoVotoEnum() {
 		return ValorDoVoto.obterValorDoVotoPorUm(valorDoVoto);
 	}
 

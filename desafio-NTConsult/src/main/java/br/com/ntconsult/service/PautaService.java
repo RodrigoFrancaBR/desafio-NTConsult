@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -13,6 +12,7 @@ import br.com.ntconsult.domain.Pauta;
 import br.com.ntconsult.domain.Voto;
 import br.com.ntconsult.domain.dto.PautaDTO;
 import br.com.ntconsult.domain.dto.VotoDTO;
+import br.com.ntconsult.enun.ValorDoVoto;
 import br.com.ntconsult.exceptions.ServiceException;
 import br.com.ntconsult.repository.PautaRepository;
 
@@ -88,11 +88,11 @@ public class PautaService {
 		int totalDeVotosNAO = 0;
 		
 		for (Voto voto : listaDeVotosPorPautaId) {
-			if (voto.getValorDoVoto().getValorDoVoto().equals("Sim")) {
+			if (voto.getValorDoVotoEnum().getValorDoVoto().equals(ValorDoVoto.SIM.getValorDoVoto())) {
 				totalDeVotosSIM +=1;
 			}else {
-				totalDeVotosNAO +=1;
-			}
+				totalDeVotosNAO +=1;	
+			}					
 		}
 
 		return new PautaDTO(pauta, totalDeVotos, totalDeVotosSIM, totalDeVotosNAO);
