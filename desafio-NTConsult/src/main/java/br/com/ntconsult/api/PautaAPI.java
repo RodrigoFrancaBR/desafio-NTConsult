@@ -15,4 +15,6 @@ public interface PautaAPI {
 
 	ResponseEntity votar(Long pautaId, VotoDTO votoDTO);
 
+	ResponseEntity obterResultadoDaVotacaoPor(Long pautaId);
+
 }

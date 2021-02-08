@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -90,8 +91,26 @@ public class PautaController implements PautaAPI {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Ocorreu algum erro ao realizar o voto: ".concat(e.getMessage()));
 		}
-		
-		
+				
+	}
+	
+	@Override
+	@GetMapping(value = "/{pautaId}/votos")
+	public ResponseEntity obterResultadoDaVotacaoPor(
+			@PathVariable("pautaId") Long pautaId){
+			try {
+
+				PautaDTO pautaDTO = service.obterResultadoDaVotacaoPor(pautaId);
+				
+				return ResponseEntity.ok(pautaDTO);
+
+			} catch (ServiceException e) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body("Ocorreu algum erro ao obter o resultado da votação: ".concat(e.getMessage()));
+			}
+							
 	}
 
 }

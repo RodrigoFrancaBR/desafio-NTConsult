@@ -2,7 +2,9 @@ package br.com.ntconsult.domain.dto;
 
 import java.io.Serializable;
 
-public class PautaDTO implements Serializable{
+import br.com.ntconsult.domain.Pauta;
+
+public class PautaDTO implements Serializable {
 
 	/**
 	 * 
@@ -11,6 +13,9 @@ public class PautaDTO implements Serializable{
 	private Long id;
 	private String titulo;
 	private String descricao;
+	private int totalDeVotos;
+	private int totalSim;
+	private int totalNao;
 
 	public PautaDTO() {
 	}
@@ -19,7 +24,16 @@ public class PautaDTO implements Serializable{
 		this.id = id;
 		this.titulo = titulo;
 		this.descricao = descricao;
-	}	
+	}
+
+	public PautaDTO(Pauta pauta, int totalDeVotos, int totalSim, int totalNao) {
+		this.id = pauta.getId();
+		this.titulo = pauta.getTitulo();
+		this.descricao = pauta.getDescricao();
+		this.totalDeVotos = totalDeVotos;
+		this.totalSim = totalSim;
+		this.totalNao = totalNao;
+	}
 
 	public Long getId() {
 		return id;
@@ -43,6 +57,30 @@ public class PautaDTO implements Serializable{
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public int getTotalDeVotos() {
+		return totalDeVotos;
+	}
+
+	public void setTotalDeVotos(int totalDeVotos) {
+		this.totalDeVotos = totalDeVotos;
+	}
+
+	public int getTotalSim() {
+		return totalSim;
+	}
+
+	public void setTotalSim(int totalSim) {
+		this.totalSim = totalSim;
+	}
+
+	public int getTotalNao() {
+		return totalNao;
+	}
+
+	public void setTotalNao(int totalNao) {
+		this.totalNao = totalNao;
 	}
 
 }

@@ -2,7 +2,9 @@ package br.com.ntconsult.service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -76,6 +78,26 @@ public class PautaService {
 		}
 	}
 
+	public PautaDTO obterResultadoDaVotacaoPor(Long pautaId) throws ServiceException {
+		Pauta pauta = obterPautaPorId(pautaId);
+
+		List<Voto> listaDeVotosPorPautaId = votoService.obterResultadoDaVotacaoPor(pautaId);
+
+		int totalDeVotos = listaDeVotosPorPautaId.size();
+		int totalDeVotosSIM = 0;
+		int totalDeVotosNAO = 0;
+		
+		for (Voto voto : listaDeVotosPorPautaId) {
+			if (voto.getValorDoVoto().getValorDoVoto().equals("Sim")) {
+				totalDeVotosSIM +=1;
+			}else {
+				totalDeVotosNAO +=1;
+			}
+		}
+
+		return new PautaDTO(pauta, totalDeVotos, totalDeVotosSIM, totalDeVotosNAO);
+	}
+
 	public Collection<Pauta> obterPautas() {
 		return this.pautaRepository.findAll();
 	}
@@ -96,7 +118,6 @@ public class PautaService {
 		} else {
 			return false;
 		}
-
 	}
 
 	private boolean sessaoEstaAberta(Pauta pauta) {

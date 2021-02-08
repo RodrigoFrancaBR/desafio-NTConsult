@@ -1,5 +1,7 @@
 package br.com.ntconsult.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import br.com.ntconsult.domain.Voto;
@@ -20,5 +22,9 @@ public class VotoService {
 
 	public void realizarVoto(Voto voto) {
 		repository.save(voto);
+	}
+
+	public List<Voto> obterResultadoDaVotacaoPor(Long pautaId) {
+		return repository.obterResultadoDaVotacaoPor(pautaId);
 	}
 }
