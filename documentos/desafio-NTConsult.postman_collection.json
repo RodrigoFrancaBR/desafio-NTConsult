@@ -118,26 +118,27 @@
 			"description": "",
 			"item": [
 				{
-					"name": "cadastrarNovaPauta",
+					"name": "cadastrarPauta",
 					"request": {
 						"url": "localhost:8080/pautas",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"value": "application/json",
+								"description": ""
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"titulo\":\"Pauta 1\",\n\t\"descricao\":\"Descrição da Pauta 1\"\n}"
+							"raw": "{\n\t\"titulo\":\"Pauta 3\",\n\t\"descricao\":\"Descrição da Pauta 3\"\n}"
 						},
 						"description": ""
 					},
 					"response": []
 				},
 				{
-					"name": "votar",
+					"name": "obterResultadoDaVotacaoPor",
 					"request": {
 						"url": "localhost:8080/pautas/1/votos",
 						"method": "POST",
@@ -158,18 +159,36 @@
 				{
 					"name": "abrirSessaoEmUmaPauta",
 					"request": {
-						"url": "localhost:8080/pautas/1/sessoes/60",
+						"url": {
+							"raw": "localhost:8080/pautas/1/sessoes?duracao=60",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pautas",
+								"1",
+								"sessoes"
+							],
+							"query": [
+								{
+									"key": "duracao",
+									"value": "60",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
 						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"value": "application/json",
+								"description": ""
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
+						"body": {},
 						"description": ""
 					},
 					"response": []
@@ -187,6 +206,46 @@
 							}
 						],
 						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "obterResultadoDaVotacaoPor",
+					"request": {
+						"url": "localhost:8080/pautas/1/votos",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"associadoId\": 1,\n    \"valorDoVoto\":\"SIM\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "votar",
+					"request": {
+						"url": "localhost:8080/pautas/1/votos",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"associadoId\":1,\n\t\"valorDoVoto\":\"SIM\"\n}"
+						},
 						"description": ""
 					},
 					"response": []
