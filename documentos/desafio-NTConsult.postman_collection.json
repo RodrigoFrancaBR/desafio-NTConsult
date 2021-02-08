@@ -52,26 +52,6 @@
 					"response": []
 				},
 				{
-					"name": "alterarAssociado",
-					"request": {
-						"url": "localhost:8080/associados/1",
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\t\n\t\"nome\":\"Rodrigo Franca\"\n}"
-						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
 					"name": "obterAssociadoPorId",
 					"request": {
 						"url": "localhost:8080/associados/1",
@@ -86,6 +66,26 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "alterarAssociado",
+					"request": {
+						"url": "localhost:8080/associados/1",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"nome\":\"Rodrigo Franca\"\n}"
 						},
 						"description": ""
 					},
@@ -245,6 +245,252 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"associadoId\":1,\n\t\"valorDoVoto\":\"SIM\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "heroku",
+			"description": "",
+			"item": [
+				{
+					"name": "pautas",
+					"description": "",
+					"item": [
+						{
+							"name": "cadastrarPauta",
+							"request": {
+								"url": "localhost:8080/pautas",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"titulo\":\"Pauta 3\",\n\t\"descricao\":\"Descrição da Pauta 3\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "obterResultadoDaVotacaoPor",
+							"request": {
+								"url": "localhost:8080/pautas/1/votos",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"associadoId\": 1,\n    \"valorDoVoto\":\"SIM\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "abrirSessaoEmUmaPauta",
+							"request": {
+								"url": {
+									"raw": "localhost:8080/pautas/1/sessoes?duracao=60",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"pautas",
+										"1",
+										"sessoes"
+									],
+									"query": [
+										{
+											"key": "duracao",
+											"value": "60",
+											"equals": true,
+											"description": ""
+										}
+									],
+									"variable": []
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "abrirSessaoEmUmaPautaDuracaoDefault",
+							"request": {
+								"url": "localhost:8080/pautas/1/sessoes",
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "obterResultadoDaVotacaoPor",
+							"request": {
+								"url": "localhost:8080/pautas/1/votos",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"associadoId\": 1,\n    \"valorDoVoto\":\"SIM\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "votar",
+							"request": {
+								"url": "localhost:8080/pautas/1/votos",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"associadoId\":1,\n\t\"valorDoVoto\":\"SIM\"\n}"
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "cadastrarAssociado",
+					"request": {
+						"url": "https://desafiontconsult.herokuapp.com/associados",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"nome\":\"Associado_1\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "excluirAssociado",
+					"request": {
+						"url": "https://desafiontconsult.herokuapp.com/associados/1",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "obterAssociadoPorId copy",
+					"request": {
+						"url": "localhost:8080/associados/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "alterarAssociado copy",
+					"request": {
+						"url": "localhost:8080/associados/1",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"nome\":\"Rodrigo Franca\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "obterAssociados copy",
+					"request": {
+						"url": "localhost:8080/associados",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
 						},
 						"description": ""
 					},
