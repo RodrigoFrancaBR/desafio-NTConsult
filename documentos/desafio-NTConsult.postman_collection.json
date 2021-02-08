@@ -263,7 +263,7 @@
 						{
 							"name": "cadastrarPauta",
 							"request": {
-								"url": "localhost:8080/pautas",
+								"url": "https://desafiontconsult.herokuapp.com/pautas",
 								"method": "POST",
 								"header": [
 									{
@@ -303,11 +303,13 @@
 							"name": "abrirSessaoEmUmaPauta",
 							"request": {
 								"url": {
-									"raw": "localhost:8080/pautas/1/sessoes?duracao=60",
+									"raw": "https://desafiontconsult.herokuapp.com/pautas/1/sessoes?duracao=60",
+									"protocol": "https",
 									"host": [
-										"localhost"
+										"desafiontconsult",
+										"herokuapp",
+										"com"
 									],
-									"port": "8080",
 									"path": [
 										"pautas",
 										"1",
@@ -339,7 +341,7 @@
 						{
 							"name": "abrirSessaoEmUmaPautaDuracaoDefault",
 							"request": {
-								"url": "localhost:8080/pautas/1/sessoes",
+								"url": "https://desafiontconsult.herokuapp.com/pautas/1/sessoes",
 								"method": "PUT",
 								"header": [
 									{
@@ -356,7 +358,7 @@
 						{
 							"name": "obterResultadoDaVotacaoPor",
 							"request": {
-								"url": "localhost:8080/pautas/1/votos",
+								"url": "https://desafiontconsult.herokuapp.com/pautas/1/votos",
 								"method": "GET",
 								"header": [
 									{
@@ -376,7 +378,7 @@
 						{
 							"name": "votar",
 							"request": {
-								"url": "localhost:8080/pautas/1/votos",
+								"url": "https://desafiontconsult.herokuapp.com/pautas/1/votos",
 								"method": "POST",
 								"header": [
 									{
@@ -387,7 +389,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"associadoId\":1,\n\t\"valorDoVoto\":\"SIM\"\n}"
+									"raw": "{\n\t\"associadoId\":2,\n\t\"valorDoVoto\":\"SIM\"\n}"
 								},
 								"description": ""
 							},
@@ -397,104 +399,111 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "cadastrarAssociado",
-					"request": {
-						"url": "https://desafiontconsult.herokuapp.com/associados",
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
+					"name": "associados",
+					"description": "",
+					"item": [
+						{
+							"name": "cadastrarAssociado",
+							"request": {
+								"url": "https://desafiontconsult.herokuapp.com/associados",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\t\n\t\"nome\":\"Associado_1\"\n}"
+								},
 								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\t\n\t\"nome\":\"Associado_1\"\n}"
+							},
+							"response": []
 						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "excluirAssociado",
-					"request": {
-						"url": "https://desafiontconsult.herokuapp.com/associados/1",
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
+						{
+							"name": "excluirAssociado",
+							"request": {
+								"url": "https://desafiontconsult.herokuapp.com/associados/1",
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
+							},
+							"response": []
 						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "obterAssociadoPorId copy",
-					"request": {
-						"url": "localhost:8080/associados/1",
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
+						{
+							"name": "obterAssociadoPorId",
+							"request": {
+								"url": "localhost:8080/associados/1",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
+								},
 								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
+							},
+							"response": []
 						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "alterarAssociado copy",
-					"request": {
-						"url": "localhost:8080/associados/1",
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
+						{
+							"name": "alterarAssociado",
+							"request": {
+								"url": "localhost:8080/associados/1",
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\t\n\t\"nome\":\"Rodrigo Franca\"\n}"
+								},
 								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\t\n\t\"nome\":\"Rodrigo Franca\"\n}"
+							},
+							"response": []
 						},
-						"description": ""
-					},
-					"response": []
-				},
-				{
-					"name": "obterAssociados copy",
-					"request": {
-						"url": "localhost:8080/associados",
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
+						{
+							"name": "obterAssociados",
+							"request": {
+								"url": "localhost:8080/associados",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
+								},
 								"description": ""
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
-						},
-						"description": ""
-					},
-					"response": []
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		}
