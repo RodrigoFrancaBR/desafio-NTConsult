@@ -1,22 +1,18 @@
 package br.com.ntconsult.api;
 
-import java.util.Collection;
 import java.util.Optional;
 
-import br.com.ntconsult.domain.Pauta;
+import org.springframework.http.ResponseEntity;
+
 import br.com.ntconsult.domain.dto.PautaDTO;
 import br.com.ntconsult.domain.dto.VotoDTO;
 
 public interface PautaAPI {
 
-	Collection<Pauta> obterPautas();
+	ResponseEntity cadastrarPauta(PautaDTO pautaDTO);
 
-	void cadastrarPauta(PautaDTO pautaDTO);
+	ResponseEntity abrirSessaoEmUmaPauta(Long pautaId, Optional<Long> duracaoSessao);
 
-	void abrirSessaoEmUmaPauta(Long pautaId, Optional<Long> duracaoSessao);
-
-	void votar(Long pautaId, VotoDTO votoDTO);
-
-	Pauta obterPautaPorId(Long id);	
+	ResponseEntity votar(Long pautaId, VotoDTO votoDTO);
 
 }

@@ -11,58 +11,68 @@ import br.com.ntconsult.domain.Pauta;
 import br.com.ntconsult.domain.Voto;
 import br.com.ntconsult.domain.dto.PautaDTO;
 import br.com.ntconsult.domain.dto.VotoDTO;
-import br.com.ntconsult.repository.AssociadoRepository;
+import br.com.ntconsult.exceptions.ServiceException;
 import br.com.ntconsult.repository.PautaRepository;
-import br.com.ntconsult.repository.VotoRepository;
 
 @Service
 public class PautaService {
 
 	private PautaRepository pautaRepository;
-	private AssociadoRepository associadoRepository;
-	private VotoRepository votoRepository;
+	private AssociadoService associadoService;
+	private VotoService votoService;
 
-	public PautaService(PautaRepository pautaRepository, AssociadoRepository associadoRepository,
-			VotoRepository votoRepository) {
+	public PautaService(PautaRepository pautaRepository, AssociadoService associadoService, VotoService votoService) {
 
 		this.pautaRepository = pautaRepository;
-		this.associadoRepository = associadoRepository;
-		this.votoRepository = votoRepository;
+		this.associadoService = associadoService;
+		this.votoService = votoService;
 
 	}
 
-	public void cadastrarPauta(PautaDTO pautaDTO) {
-		Pauta pauta = new Pauta(pautaDTO);
-		pautaRepository.save(pauta);
-	}
+	public PautaDTO cadastrarPauta(PautaDTO pautaDTO) throws ServiceException {
 
-	public void abrirSessaoEmUmaPauta(Long pautaId, Optional<Long> duracaoSessao) throws Exception {
-		Pauta pauta = obterPautaPorId(pautaId);
-		
-		if (pauta != null) {
-		
-			if (duracaoSessao.isPresent()) {
-				pauta.setDuracaoSessao(duracaoSessao.get());	
-			}else {
-				pauta.setDuracaoSessao(1l);
-			}
-			
-			pauta.setDataDeAberturaSessao(LocalDateTime.now());
-			pautaRepository.save(pauta);
-			
-		}else {
-			throw new Exception("Pauta não encontrada");
+		if (pautaDTO.getDescricao() == null || pautaDTO.getDescricao().trim().equals("")) {
+			throw new ServiceException("A descrição de uma pauta é obrigatório!");
 		}
 
+		Pauta pauta = new Pauta(pautaDTO);
+		Pauta pautaSalva = pautaRepository.save(pauta);
+
+		return new PautaDTO(pautaSalva.getId(), pautaSalva.getTitulo(), pautaSalva.getDescricao());
 	}
 
-	public void votar(Long pautaId, VotoDTO votoDTO) {
-		Pauta pauta = obterPautaPorId(pautaId);
-		Optional<Associado> associado = associadoRepository.findById(votoDTO.getAssociadoId());
+	public Pauta abrirSessaoEmUmaPauta(Long pautaId, Optional<Long> duracaoSessao) throws ServiceException {
 
-		if (pauta != null && associado.isPresent()) {
-			Voto voto = new Voto(pauta, associado.get(), votoDTO.getValorDoVoto());
-			votoRepository.save(voto);
+		Pauta pauta = obterPautaPorId(pautaId);
+
+		if (duracaoSessao.isPresent()) {
+			pauta.setDuracaoSessao(duracaoSessao.get());
+		} else {
+			pauta.setDuracaoSessao(1l);
+		}
+
+		pauta.setDataDeAberturaSessao(LocalDateTime.now());
+
+		return pautaRepository.save(pauta);
+
+	}
+
+	public void votar(Long pautaId, VotoDTO votoDTO) throws ServiceException {
+
+		Pauta pauta = obterPautaPorId(pautaId);
+
+		Associado associado = associadoService.obterAssociadoPorId(votoDTO.getAssociadoId());
+
+		if (!podeVotarNessaPauta(pauta.getId(), associado.getId())) {
+			throw new ServiceException("Associado: " + associado.getId() + " já votou na sessao: " + pauta.getId());
+		}
+
+		Voto voto = new Voto(pauta, associado, votoDTO.getValorDoVoto());
+
+		if (sessaoEstaAberta(pauta)) {
+			votoService.realizarVoto(voto);
+		} else {
+			throw new ServiceException("A Sessao já está Encerrada");
 		}
 	}
 
@@ -70,13 +80,36 @@ public class PautaService {
 		return this.pautaRepository.findAll();
 	}
 
-	public Pauta obterPautaPorId(Long id) {
-		Optional<Pauta> pautaOptional = pautaRepository.findById(id);
-
-		if (pautaOptional.isPresent()) {
-			return pautaOptional.get();
+	public Pauta obterPautaPorId(Long id) throws ServiceException {
+		Optional<Pauta> pauta = pautaRepository.findById(id);
+		if (pauta.isPresent()) {
+			return pauta.get();
 		} else {
-			return null;
+			throw new ServiceException("Nenhuma Pauta encontrada com o id informado: " + id);
+		}
+	}
+
+	private boolean podeVotarNessaPauta(Long pautaId, Long associadoId) {
+		Voto voto = votoService.obterVotoDoAssociadoNaPauta(pautaId, associadoId);
+		if (voto == null) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	private boolean sessaoEstaAberta(Pauta pauta) {
+
+		LocalDateTime dataAberturaSessao = pauta.getDataDeAberturaSessao();
+		LocalDateTime dataEncerramentoSessao = dataAberturaSessao.plusMinutes(pauta.getDuracaoSessao());
+		LocalDateTime dataVotacao = LocalDateTime.now();
+
+		if ((dataVotacao.isAfter(dataAberturaSessao) || dataVotacao.isEqual(dataAberturaSessao))
+				&& (dataVotacao.isBefore(dataEncerramentoSessao) || dataVotacao.isEqual(dataEncerramentoSessao))) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

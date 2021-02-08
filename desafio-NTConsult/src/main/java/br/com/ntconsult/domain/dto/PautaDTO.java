@@ -8,15 +8,25 @@ public class PautaDTO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Long id;
 	private String titulo;
 	private String descricao;
 
 	public PautaDTO() {
 	}
 
-	public PautaDTO(String titulo, String descricao) {
+	public PautaDTO(Long id, String titulo, String descricao) {
+		this.id = id;
 		this.titulo = titulo;
 		this.descricao = descricao;
+	}	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getTitulo() {
