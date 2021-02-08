@@ -22,9 +22,7 @@ public class PautaService {
 	private AssociadoRepository associadoRepository;
 	private VotoRepository votoRepository;
 
-	public PautaService(
-			PautaRepository pautaRepository,
-			AssociadoRepository associadoRepository,
+	public PautaService(PautaRepository pautaRepository, AssociadoRepository associadoRepository,
 			VotoRepository votoRepository) {
 
 		this.pautaRepository = pautaRepository;
@@ -38,11 +36,24 @@ public class PautaService {
 		pautaRepository.save(pauta);
 	}
 
-	public void abrirSessaoEmUmaPauta(Long pautaId, Long duracaoSessao) {
+	public void abrirSessaoEmUmaPauta(Long pautaId, Optional<Long> duracaoSessao) throws Exception {
 		Pauta pauta = obterPautaPorId(pautaId);
-		pauta.setDuracaoSessao(duracaoSessao);
-		pauta.setDataDeAberturaSessao(LocalDateTime.now());
-		pautaRepository.save(pauta);
+		
+		if (pauta != null) {
+		
+			if (duracaoSessao.isPresent()) {
+				pauta.setDuracaoSessao(duracaoSessao.get());	
+			}else {
+				pauta.setDuracaoSessao(1l);
+			}
+			
+			pauta.setDataDeAberturaSessao(LocalDateTime.now());
+			pautaRepository.save(pauta);
+			
+		}else {
+			throw new Exception("Pauta não encontrada");
+		}
+
 	}
 
 	public void votar(Long pautaId, VotoDTO votoDTO) {

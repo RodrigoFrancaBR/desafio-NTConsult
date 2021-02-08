@@ -1,6 +1,7 @@
 package br.com.ntconsult.controller;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,20 +33,24 @@ public class PautaController implements PautaAPI {
 	}
 
 	@Override
-	@PutMapping(value = "/{pautaId}/sessoes/{duracaoSessao}")
+	@PutMapping(value = {"/{pautaId}/sessoes", "/{duracaoSessao}"})
 	public void abrirSessaoEmUmaPauta(
-			@PathVariable("pautaId") Long pautaId,
-			@PathVariable("duracaoSessao") Long duracaoSessao) {
+			@PathVariable(name = "pautaId", required = true) Long pautaId,
+			@PathVariable(name ="duracaoSessao", required = false) Optional<Long> duracaoSessao) {
 		
-		service.abrirSessaoEmUmaPauta(pautaId, duracaoSessao);
+		try {
+			service.abrirSessaoEmUmaPauta(pautaId, duracaoSessao);	
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		
+
 	}
 
 	@Override
 	@PostMapping(value = "/{pautaId}/votos")
-	public void votar(
-			@PathVariable("pautaId") Long pautaId,
-			@RequestBody VotoDTO votoDTO) {
-		service.votar(pautaId, votoDTO);		
+	public void votar(@PathVariable("pautaId") Long pautaId, @RequestBody VotoDTO votoDTO) {
+		service.votar(pautaId, votoDTO);
 	}
 
 	@Override
@@ -57,6 +62,5 @@ public class PautaController implements PautaAPI {
 	public Pauta obterPautaPorId(Long id) {
 		return service.obterPautaPorId(id);
 	}
-
 
 }

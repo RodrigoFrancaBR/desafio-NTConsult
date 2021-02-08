@@ -1,19 +1,19 @@
 package br.com.ntconsult.api;
 
-import java.util.Collection;
+import org.springframework.http.ResponseEntity;
 
 import br.com.ntconsult.domain.Associado;
 
-public interface AssociadoAPI {
+public interface AssociadoAPI {	
 
-	Collection<Associado> obterAssociados();
+	ResponseEntity cadastrarAssociado(Associado Associado);
 
-	void cadastrarAssociado(Associado Associado);	
+	ResponseEntity obterAssociadoPorId(Long id);
+	
+	ResponseEntity obterAssociados();
 
-	Associado obterAssociadoPorId(Long id);
+	ResponseEntity alterarAssociado(Long id, Associado associado);
 
-	void alterarAssociado(Long id, Associado Associado);
-
-	void excluirAssociado(Long id);
+	ResponseEntity excluirAssociado(Long id);
 
 }

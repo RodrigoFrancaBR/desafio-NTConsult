@@ -1,6 +1,7 @@
 package br.com.ntconsult.api;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import br.com.ntconsult.domain.Pauta;
 import br.com.ntconsult.domain.dto.PautaDTO;
@@ -12,7 +13,7 @@ public interface PautaAPI {
 
 	void cadastrarPauta(PautaDTO pautaDTO);
 
-	void abrirSessaoEmUmaPauta(Long pautaId, Long duracaoSessao);
+	void abrirSessaoEmUmaPauta(Long pautaId, Optional<Long> duracaoSessao);
 
 	void votar(Long pautaId, VotoDTO votoDTO);
 

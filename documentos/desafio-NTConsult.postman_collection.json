@@ -1,55 +1,113 @@
 {
+	"variables": [],
 	"info": {
-		"_postman_id": "a1acde12-612a-49f3-893d-4df33c4f334f",
 		"name": "desafio-NTConsult",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "9c8deb06-f4f7-5b50-2d76-0bcc959e2f54",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "associados",
+			"description": "",
 			"item": [
 				{
-					"name": "findAll",
+					"name": "cadastrarAssociado",
 					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/associados",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"associados"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "save",
-					"request": {
+						"url": "localhost:8080/associados",
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"value": "application/json",
+								"description": ""
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
 						},
-						"url": {
-							"raw": "localhost:8080/associados",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"associados"
-							]
-						}
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "excluirAssociado",
+					"request": {
+						"url": "localhost:8080/associados/1",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "alterarAssociado",
+					"request": {
+						"url": "localhost:8080/associados/1",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"nome\":\"Rodrigo Franca\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "obterAssociadoPorId",
+					"request": {
+						"url": "localhost:8080/associados/1",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "obterAssociados",
+					"request": {
+						"url": "localhost:8080/associados",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"nome\":\"Rodrigo\"\n}"
+						},
+						"description": ""
 					},
 					"response": []
 				}
@@ -57,10 +115,12 @@
 		},
 		{
 			"name": "pautas",
+			"description": "",
 			"item": [
 				{
 					"name": "cadastrarNovaPauta",
 					"request": {
+						"url": "localhost:8080/pautas",
 						"method": "POST",
 						"header": [
 							{
@@ -72,22 +132,14 @@
 							"mode": "raw",
 							"raw": "{\n\t\"titulo\":\"Pauta 1\",\n\t\"descricao\":\"Descrição da Pauta 1\"\n}"
 						},
-						"url": {
-							"raw": "localhost:8080/pautas",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"pautas"
-							]
-						}
+						"description": ""
 					},
 					"response": []
 				},
 				{
 					"name": "votar",
 					"request": {
+						"url": "localhost:8080/pautas/1/votos",
 						"method": "POST",
 						"header": [
 							{
@@ -99,24 +151,14 @@
 							"mode": "raw",
 							"raw": "{\n\t\"associadoId\": 1,\n    \"valorDoVoto\":\"SIM\"\n}"
 						},
-						"url": {
-							"raw": "localhost:8080/pautas/1/votos",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"pautas",
-								"1",
-								"votos"
-							]
-						}
+						"description": ""
 					},
 					"response": []
 				},
 				{
 					"name": "abrirSessaoEmUmaPauta",
 					"request": {
+						"url": "localhost:8080/pautas/1/sessoes/60",
 						"method": "PUT",
 						"header": [
 							{
@@ -124,19 +166,28 @@
 								"value": "application/json"
 							}
 						],
-						"url": {
-							"raw": "localhost:8080/pautas/1/sessoes/60",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"pautas",
-								"1",
-								"sessoes",
-								"60"
-							]
-						}
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "abrirSessaoEmUmaPautaDuracaoDefault",
+					"request": {
+						"url": "localhost:8080/pautas/1/sessoes",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
 					},
 					"response": []
 				}
