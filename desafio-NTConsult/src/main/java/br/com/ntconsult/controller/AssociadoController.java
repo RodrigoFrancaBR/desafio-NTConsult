@@ -3,6 +3,8 @@ package br.com.ntconsult.controller;
 import java.net.URI;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/associados")
 public class AssociadoController implements AssociadoAPI {
-
+	final static Logger logger = LoggerFactory.getLogger(AssociadoController.class);
 	private AssociadoService service;
 
 	public AssociadoController(AssociadoService service) {
@@ -35,19 +37,24 @@ public class AssociadoController implements AssociadoAPI {
 
 	@Override
 	@ApiOperation("Cadastrar um Associado")
-	@PostMapping
-	public ResponseEntity cadastrarAssociado(@RequestBody Associado Associado) {
+	@PostMapping	
+	public ResponseEntity cadastrarAssociado(@RequestBody Associado associado) {
+		logger.info("======= AssociadoController:: inicializando cadastrarAssociado =======");
+		
 		try {
-
-			Associado associado = service.cadastrarAssociado(Associado);
-
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(associado.getId())
-					.toUri();
+			
+			Associado associadoCadastrado = service.cadastrarAssociado(associado);
+								
+			URI uri = obterUri(associadoCadastrado.getId());
+			
+			logger.info("======= AssociadoController:: finalizado cadastrarAssociado =======");								
 			return ResponseEntity.created(uri).body(associado);
 
 		} catch (ServiceException e) {
+			logger.info("======= AssociadoController::ServiceException: " + e.getMessage() + "=======");			
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
+			logger.info("======= AssociadoController::Exception: " + e.getMessage() + "=======");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Ocorreu algum erro ao cadastrar um associado: ".concat(e.getMessage()));
 		}
@@ -57,15 +64,20 @@ public class AssociadoController implements AssociadoAPI {
 	@ApiOperation("Obter um Associado")
 	@GetMapping("/{id}")
 	public ResponseEntity obterAssociadoPorId(@PathVariable("id") Long id) {
+		logger.info("======= AssociadoController:: inicializando obterAssociadoPorId =======");
 		try {
-
+						
 			Associado associado = service.obterAssociadoPorId(id);
-
+			
+			logger.info("======= AssociadoController:: finalizado obterAssociadoPorId =======");					
 			return ResponseEntity.ok(associado);
 
 		} catch (ServiceException e) {
+			logger.info("======= AssociadoController::ServiceException: " + e.getMessage() + "=======");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
+			logger.info("======= AssociadoController::Exception =======");
+			logger.info(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Ocorreu algum erro ao obter um associado: ".concat(e.getMessage()));
 		}
@@ -75,8 +87,10 @@ public class AssociadoController implements AssociadoAPI {
 	@ApiOperation("Obter todos os Associados")
 	@GetMapping
 	public ResponseEntity obterAssociados() {
-		try {
-			Collection<Associado> listaDeAssociados = service.obterAssociados();
+		logger.info("======= AssociadoController:: inicializando obterAssociados =======");
+		
+		try {					
+			Collection<Associado> listaDeAssociados = service.obterAssociados();		
 			return ResponseEntity.ok(listaDeAssociados);
 		} catch (ServiceException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -117,5 +131,14 @@ public class AssociadoController implements AssociadoAPI {
 					.body("Ocorreu algum erro ao excluir um Associado: ".concat(e.getMessage()));
 		}
 	}
+	
+	private URI obterUri(Long id) {
+		return ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(id)
+				.toUri();
+	}
+	
 
 }
