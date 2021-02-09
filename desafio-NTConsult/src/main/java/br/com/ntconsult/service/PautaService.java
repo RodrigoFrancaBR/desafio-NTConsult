@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -24,14 +25,44 @@ public class PautaService {
 	private VotoService votoService;
 
 	public PautaService(PautaRepository pautaRepository, AssociadoService associadoService, VotoService votoService) {
-
 		this.pautaRepository = pautaRepository;
 		this.associadoService = associadoService;
 		this.votoService = votoService;
+	}
+
+	public Collection<Pauta> obterPautas() throws ServiceException {
+		return pautaRepository.findAll();
+	}
+
+	public Pauta obterPautaPorId(Long id) throws ServiceException {
+		Optional<Pauta> pauta = pautaRepository.findById(id);
+		if (pauta.isPresent()) {
+			return pauta.get();
+		} else {
+			throw new ServiceException("Nenhuma Pauta encontrada com o id informado: " + id);
+		}
+	}
+
+	public void alterarPauta(Long id, Pauta pauta) throws ServiceException {
+		Pauta pautaEncontrada = obterPautaPorId(id);
+
+		if (!pautaEstaEmSessao(pautaEncontrada)) {
+			pautaEncontrada.setTitulo(pauta.getTitulo());
+			pautaEncontrada.setDescricao(pauta.getDescricao());
+			pautaRepository.save(pautaEncontrada);
+		}
 
 	}
 
-	public PautaDTO cadastrarPauta(PautaDTO pautaDTO) throws ServiceException {
+	public void excluirPauta(Long id) throws ServiceException {
+		Pauta pautaEncontrada = obterPautaPorId(id);
+
+		if (!pautaEstaEmSessao(pautaEncontrada)) {
+			pautaRepository.delete(pautaEncontrada);
+		}
+	}
+
+	public Long cadastrarPauta(PautaDTO pautaDTO) throws ServiceException {
 
 		if (pautaDTO.getDescricao() == null || pautaDTO.getDescricao().trim().equals("")) {
 			throw new ServiceException("A descrição de uma pauta é obrigatório!");
@@ -39,8 +70,8 @@ public class PautaService {
 
 		Pauta pauta = new Pauta(pautaDTO);
 		Pauta pautaSalva = pautaRepository.save(pauta);
+		return pautaSalva.getId();
 
-		return new PautaDTO(pautaSalva.getId(), pautaSalva.getTitulo(), pautaSalva.getDescricao());
 	}
 
 	public Pauta abrirSessaoEmUmaPauta(Long pautaId, Optional<Long> duracaoSessao) throws ServiceException {
@@ -78,37 +109,24 @@ public class PautaService {
 		}
 	}
 
-	public PautaDTO obterResultadoDaVotacaoPor(Long pautaId) throws ServiceException {
+	public PautaDTO obterResultadoDaVotacao(Long pautaId) throws ServiceException {
 		Pauta pauta = obterPautaPorId(pautaId);
 
-		List<Voto> listaDeVotosPorPautaId = votoService.obterResultadoDaVotacaoPor(pautaId);
+		List<Voto> listaDeVotos = votoService.obterResultadoDaVotacao(pautaId);
 
-		int totalDeVotos = listaDeVotosPorPautaId.size();
+		int totalDeVotos = listaDeVotos.size();
 		int totalDeVotosSIM = 0;
 		int totalDeVotosNAO = 0;
-		
-		for (Voto voto : listaDeVotosPorPautaId) {
-			if (voto.getValorDoVotoEnum().getValorDoVoto().equals(ValorDoVoto.SIM.getValorDoVoto())) {
-				totalDeVotosSIM +=1;
-			}else {
-				totalDeVotosNAO +=1;	
-			}					
+
+		for (Voto voto : listaDeVotos) {
+			if (voto.getValorDoVotoEnum().equals(ValorDoVoto.SIM)) {
+				totalDeVotosSIM += 1;
+			} else {
+				totalDeVotosNAO += 1;
+			}
 		}
 
 		return new PautaDTO(pauta, totalDeVotos, totalDeVotosSIM, totalDeVotosNAO);
-	}
-
-	public Collection<Pauta> obterPautas() {
-		return this.pautaRepository.findAll();
-	}
-
-	public Pauta obterPautaPorId(Long id) throws ServiceException {
-		Optional<Pauta> pauta = pautaRepository.findById(id);
-		if (pauta.isPresent()) {
-			return pauta.get();
-		} else {
-			throw new ServiceException("Nenhuma Pauta encontrada com o id informado: " + id);
-		}
 	}
 
 	private boolean podeVotarNessaPauta(Long pautaId, Long associadoId) {
@@ -129,6 +147,14 @@ public class PautaService {
 		if ((dataVotacao.isAfter(dataAberturaSessao) || dataVotacao.isEqual(dataAberturaSessao))
 				&& (dataVotacao.isBefore(dataEncerramentoSessao) || dataVotacao.isEqual(dataEncerramentoSessao))) {
 			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean pautaEstaEmSessao(Pauta pauta) throws ServiceException {
+		if (pauta.getDataDeAberturaSessao() != null) {
+			throw new ServiceException("A pauta já está em uso por uma Sessao");
 		} else {
 			return false;
 		}

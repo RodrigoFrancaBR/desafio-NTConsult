@@ -24,7 +24,7 @@ public class VotoService {
 		repository.save(voto);
 	}
 
-	public List<Voto> obterResultadoDaVotacaoPor(Long pautaId) {
+	public List<Voto> obterResultadoDaVotacao(Long pautaId) {
 		return repository.obterResultadoDaVotacaoPor(pautaId);
 	}
 }

@@ -9,8 +9,7 @@ public class PautaDTO implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private Long id;
+	private static final long serialVersionUID = 1L;	
 	private String titulo;
 	private String descricao;
 	private int totalDeVotos;
@@ -20,29 +19,14 @@ public class PautaDTO implements Serializable {
 	public PautaDTO() {
 	}
 
-	public PautaDTO(Long id, String titulo, String descricao) {
-		this.id = id;
-		this.titulo = titulo;
-		this.descricao = descricao;
-	}
-
-	public PautaDTO(Pauta pauta, int totalDeVotos, int totalSim, int totalNao) {
-		this.id = pauta.getId();
+	public PautaDTO(Pauta pauta, int totalDeVotos, int totalSim, int totalNao) {		
 		this.titulo = pauta.getTitulo();
 		this.descricao = pauta.getDescricao();
 		this.totalDeVotos = totalDeVotos;
 		this.totalSim = totalSim;
 		this.totalNao = totalNao;
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	
 	public String getTitulo() {
 		return titulo;
 	}
