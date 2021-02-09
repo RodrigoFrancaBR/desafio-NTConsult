@@ -24,7 +24,10 @@ import br.com.ntconsult.domain.dto.PautaDTO;
 import br.com.ntconsult.domain.dto.VotoDTO;
 import br.com.ntconsult.exceptions.ServiceException;
 import br.com.ntconsult.service.PautaService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+@Api
 @RestController
 @RequestMapping("pautas")
 public class PautaController implements PautaAPI {
@@ -34,8 +37,9 @@ public class PautaController implements PautaAPI {
 	public PautaController(PautaService service) {
 		this.service = service;
 	}
-	
+
 	@Override
+	@ApiOperation("Obter todas as Pautas")
 	@GetMapping
 	public ResponseEntity obterPautas() {
 		try {
@@ -48,11 +52,11 @@ public class PautaController implements PautaAPI {
 					.body("Ocorreu algum erro ao obter uma lista de Pautas: ".concat(e.getMessage()));
 		}
 	}
-	
 
 	@Override
+	@ApiOperation("Obter uma Pauta")
 	@GetMapping("/{pautaId}")
-	public ResponseEntity obterPautaPorId(@PathVariable("pautaId")Long pautaId) {
+	public ResponseEntity obterPautaPorId(@PathVariable("pautaId") Long pautaId) {
 		try {
 			Pauta pauta = service.obterPautaPorId(pautaId);
 			return ResponseEntity.ok(pauta);
@@ -63,10 +67,11 @@ public class PautaController implements PautaAPI {
 					.body("Ocorreu algum erro ao obter um associado: ".concat(e.getMessage()));
 		}
 	}
-	
+
 	@Override
+	@ApiOperation("Alterar os dados de uma Pauta")
 	@PatchMapping("/{pautaId}")
-	public ResponseEntity alterarPauta(@PathVariable("pautaId")Long pautaId, @RequestBody Pauta pauta) {
+	public ResponseEntity alterarPauta(@PathVariable("pautaId") Long pautaId, @RequestBody Pauta pauta) {
 		try {
 			service.alterarPauta(pautaId, pauta);
 			return ResponseEntity.ok().build();
@@ -80,8 +85,9 @@ public class PautaController implements PautaAPI {
 	}
 
 	@Override
+	@ApiOperation("Excluir uma Pauta")
 	@DeleteMapping("/{pautaId}")
-	public ResponseEntity excluirPauta(@PathVariable ("pautaId")Long pautaId) {
+	public ResponseEntity excluirPauta(@PathVariable("pautaId") Long pautaId) {
 		try {
 			service.excluirPauta(pautaId);
 			return ResponseEntity.ok().build();
@@ -94,6 +100,7 @@ public class PautaController implements PautaAPI {
 	}
 
 	@Override
+	@ApiOperation("Cadastrar uma Pauta")
 	@PostMapping
 	public ResponseEntity cadastrarPauta(@RequestBody PautaDTO pautaDTO) {
 		try {
@@ -112,9 +119,9 @@ public class PautaController implements PautaAPI {
 	}
 
 	@Override
+	@ApiOperation("Abrir uma sessão em uma Pauta")
 	@PutMapping("/{pautaId}/sessoes")
-	public ResponseEntity abrirSessaoEmUmaPauta(
-			@PathVariable("pautaId") Long pautaId,
+	public ResponseEntity abrirSessaoEmUmaPauta(@PathVariable("pautaId") Long pautaId,
 			@RequestParam("duracao") Optional<Long> duracao) {
 
 		try {
@@ -133,6 +140,7 @@ public class PautaController implements PautaAPI {
 	}
 
 	@Override
+	@ApiOperation("Realizar um voto em uma Pauta")
 	@PostMapping("/{pautaId}/votos")
 	public ResponseEntity votar(@PathVariable("pautaId") Long pautaId, @RequestBody VotoDTO votoDTO) {
 		try {
@@ -151,10 +159,9 @@ public class PautaController implements PautaAPI {
 	}
 
 	@Override
+	@ApiOperation("Obter o Resultado da votação de uma Pauta")
 	@GetMapping("/{pautaId}/votos")
-	public ResponseEntity obterResultadoDaVotacao(
-			@PathVariable("pautaId") Long pautaId			
-			) {
+	public ResponseEntity obterResultadoDaVotacao(@PathVariable("pautaId") Long pautaId) {
 		try {
 
 			PautaDTO pautaDTO = service.obterResultadoDaVotacao(pautaId);
@@ -169,10 +176,4 @@ public class PautaController implements PautaAPI {
 		}
 
 	}
-
-	
-
-
-	
-
 }

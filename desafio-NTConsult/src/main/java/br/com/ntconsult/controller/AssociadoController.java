@@ -19,9 +19,12 @@ import br.com.ntconsult.api.AssociadoAPI;
 import br.com.ntconsult.domain.Associado;
 import br.com.ntconsult.exceptions.ServiceException;
 import br.com.ntconsult.service.AssociadoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
+@Api
 @RestController
-@RequestMapping(value = "/associados")
+@RequestMapping("/associados")
 public class AssociadoController implements AssociadoAPI {
 
 	private AssociadoService service;
@@ -31,15 +34,14 @@ public class AssociadoController implements AssociadoAPI {
 	}
 
 	@Override
+	@ApiOperation("Cadastrar um Associado")
 	@PostMapping
 	public ResponseEntity cadastrarAssociado(@RequestBody Associado Associado) {
 		try {
 
 			Associado associado = service.cadastrarAssociado(Associado);
 
-			URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-					.path("/{id}")
-					.buildAndExpand(associado.getId())
+			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(associado.getId())
 					.toUri();
 			return ResponseEntity.created(uri).body(associado);
 
@@ -52,12 +54,13 @@ public class AssociadoController implements AssociadoAPI {
 	}
 
 	@Override
+	@ApiOperation("Obter um Associado")
 	@GetMapping("/{id}")
 	public ResponseEntity obterAssociadoPorId(@PathVariable("id") Long id) {
 		try {
 
 			Associado associado = service.obterAssociadoPorId(id);
-			
+
 			return ResponseEntity.ok(associado);
 
 		} catch (ServiceException e) {
@@ -67,12 +70,13 @@ public class AssociadoController implements AssociadoAPI {
 					.body("Ocorreu algum erro ao obter um associado: ".concat(e.getMessage()));
 		}
 	}
-	
+
 	@Override
+	@ApiOperation("Obter todos os Associados")
 	@GetMapping
-	public ResponseEntity  obterAssociados() {
+	public ResponseEntity obterAssociados() {
 		try {
-			Collection<Associado> listaDeAssociados = service.obterAssociados();			
+			Collection<Associado> listaDeAssociados = service.obterAssociados();
 			return ResponseEntity.ok(listaDeAssociados);
 		} catch (ServiceException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -83,15 +87,14 @@ public class AssociadoController implements AssociadoAPI {
 	}
 
 	@Override
+	@ApiOperation("Alterar os dados de um Associado pelo Id")
 	@PatchMapping("/{id}")
-	public ResponseEntity alterarAssociado(
-				@PathVariable Long id,
-				@RequestBody Associado associado) {
+	public ResponseEntity alterarAssociado(@PathVariable Long id, @RequestBody Associado associado) {
 		try {
-			
+
 			Associado associadoAlterado = service.alterarAssociado(id, associado);
 			return ResponseEntity.ok(associadoAlterado);
-			
+
 		} catch (ServiceException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
@@ -99,9 +102,9 @@ public class AssociadoController implements AssociadoAPI {
 					.body("Ocorreu algum erro ao alterar um Associado: ".concat(e.getMessage()));
 		}
 	}
-	
 
 	@Override
+	@ApiOperation("Excluir um Associado")
 	@DeleteMapping("/{id}")
 	public ResponseEntity excluirAssociado(@PathVariable Long id) {
 		try {
