@@ -7,10 +7,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class DesafioNtConsultApplication {
+	
 	final static Logger logger = LoggerFactory.getLogger(DesafioNtConsultApplication.class);
+	
 	public static void main(String[] args) {
+	
 		logger.info("======= Iniciando DesafioNtConsultApplication::main =======");
+		
 		SpringApplication.run(DesafioNtConsultApplication.class, args);
+		
 		logger.info("======= Iniciado DesafioNtConsultApplication::main =======");
 	}
 

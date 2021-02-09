@@ -19,11 +19,11 @@ public class AssociadoService {
 		this.repository = repository;
 	}
 
-	public Associado cadastrarAssociado(Associado associado) throws ServiceException {
+	public Long cadastrarAssociado(Associado associado) throws ServiceException {
 		if (associado.getNome() == null || associado.getNome().trim().equals("")) {
 			throw new ServiceException("Nome do associado é obrigatório!");
 		}
-		return repository.save(associado);
+		return repository.save(associado).getId();
 
 	}
 
@@ -38,17 +38,17 @@ public class AssociadoService {
 
 	public Collection<Associado> obterAssociados() throws ServiceException {
 		List<Associado> listaDeAssociados = repository.findAll();
-		if (listaDeAssociados.size()>0) {
+		if (listaDeAssociados.size() > 0) {
 			return listaDeAssociados;
 		} else {
 			throw new ServiceException("Nenhum Associado encontrado no momento");
 		}
 	}
 
-	public Associado alterarAssociado(Long id, Associado associado) throws ServiceException {
+	public void alterarAssociado(Long id, Associado associado) throws ServiceException {
 		Associado associadoEncontrado = obterAssociadoPorId(id);
 		associadoEncontrado.setNome(associado.getNome());
-		return repository.save(associadoEncontrado);		
+		repository.save(associadoEncontrado);
 	}
 
 	public void excluirAssociado(Long id) throws ServiceException {

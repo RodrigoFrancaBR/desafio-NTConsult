@@ -22,7 +22,8 @@ public class SwaggerConfiguration {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
 				.apis(RequestHandlerSelectors.basePackage(CONTROLLERS_PACKAGE))
-				.paths(PathSelectors.any()).build()
+				.paths(PathSelectors.any()) // sem restrições de api, acesso a todas.
+				.build()				
 				.apiInfo(apiInfo());
 	}
 

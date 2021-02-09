@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -69,8 +68,7 @@ public class PautaService {
 		}
 
 		Pauta pauta = new Pauta(pautaDTO);
-		Pauta pautaSalva = pautaRepository.save(pauta);
-		return pautaSalva.getId();
+		return pautaRepository.save(pauta).getId();		
 
 	}
 
