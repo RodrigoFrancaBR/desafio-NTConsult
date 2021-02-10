@@ -2,6 +2,7 @@ package br.com.ntconsult.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,8 +19,9 @@ public class Associado implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long id;	
 	private String nome;
+	@Column(length = 11, unique = true, nullable = false)
 	private String cpf;
 
 	public Associado() {

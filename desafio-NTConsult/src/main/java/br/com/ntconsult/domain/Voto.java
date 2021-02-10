@@ -32,8 +32,8 @@ public class Voto implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "associado_id")
 	private Associado associado;
-	
-	@Column(name = "valor")
+		
+	@Column(name="valor_voto", length = 3, nullable = false)
 	String valorDoVoto;
 
 	public Voto() {
