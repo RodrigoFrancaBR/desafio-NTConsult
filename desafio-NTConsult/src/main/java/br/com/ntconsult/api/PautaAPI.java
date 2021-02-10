@@ -5,10 +5,8 @@ import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 
 import br.com.ntconsult.domain.Pauta;
-import br.com.ntconsult.domain.Voto;
+import br.com.ntconsult.domain.dto.AssociadoDTO;
 import br.com.ntconsult.domain.dto.PautaDTO;
-import br.com.ntconsult.domain.dto.VotoDTO;
-import br.com.ntconsult.enun.ValorDoVoto;
 
 public interface PautaAPI {
 
@@ -24,7 +22,7 @@ public interface PautaAPI {
 
 	ResponseEntity abrirSessaoEmUmaPauta(Long pautaId, Optional<Long> duracaoSessao);
 
-	ResponseEntity votar(Long pautaId, VotoDTO votoDTO);
+	ResponseEntity votar(Long pautaId, AssociadoDTO associadoDTO);
 
 	ResponseEntity obterResultadoDaVotacao(Long pautaId);
 

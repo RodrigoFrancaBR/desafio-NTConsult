@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.ntconsult.api.PautaAPI;
 import br.com.ntconsult.domain.Pauta;
+import br.com.ntconsult.domain.dto.AssociadoDTO;
 import br.com.ntconsult.domain.dto.PautaDTO;
-import br.com.ntconsult.domain.dto.VotoDTO;
 import br.com.ntconsult.exceptions.ServiceException;
 import br.com.ntconsult.service.PautaService;
 import io.swagger.annotations.Api;
@@ -45,7 +45,7 @@ public class PautaController implements PautaAPI {
 	
 	@Override
 	@ApiOperation("Obter todas as Pautas")
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping()
 	public ResponseEntity<?> obterPautas() {
 		
 		logger.info("======= PautaController:: inicializando obterPautas =======");		
@@ -71,7 +71,7 @@ public class PautaController implements PautaAPI {
 
 	@Override
 	@ApiOperation("Obter uma Pauta")
-	@GetMapping(path = "/{pautaId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{pautaId}")
 	public ResponseEntity<?> obterPautaPorId(@PathVariable("pautaId") Long pautaId) {
 
 		logger.info("======= PautaController:: inicializando obterPautaPorId =======");		
@@ -166,7 +166,7 @@ public class PautaController implements PautaAPI {
 		} catch (ServiceException e) {
 			
 			logger.info("======= PautaController::ServiceException: " + e.getMessage() + "=======");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
 			
 		} catch (Exception e) {
 			
@@ -178,7 +178,7 @@ public class PautaController implements PautaAPI {
 
 	@Override
 	@ApiOperation("Abrir uma sessão em uma Pauta")
-	@PutMapping(path="/{pautaId}/sessoes", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(path="/{pautaId}/sessoes")
 	public ResponseEntity<?> abrirSessaoEmUmaPauta(
 			@PathVariable("pautaId") Long pautaId,
 			@RequestParam("duracao") Optional<Long> duracao) {
@@ -194,7 +194,7 @@ public class PautaController implements PautaAPI {
 		} catch (ServiceException e) {
 			
 			logger.info("======= PautaController::ServiceException: " + e.getMessage() + "=======");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
 		} catch (Exception e) {
 			
 			logger.info("======= PautaController::Exception: " + e.getMessage() + "=======");
@@ -209,12 +209,12 @@ public class PautaController implements PautaAPI {
 	@PostMapping(path="/{pautaId}/votos", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> votar(
 			@PathVariable("pautaId") Long pautaId,
-			@RequestBody VotoDTO votoDTO) {
+			@RequestBody AssociadoDTO associadoDTO) {
 		
 		logger.info("======= PautaController:: inicializando votar =======");
 		try {
 
-			service.votar(pautaId, votoDTO);
+			service.votar(pautaId, associadoDTO);
 			
 			logger.info("======= PautaController:: finalizado votar =======");
 			return ResponseEntity.ok().build();
@@ -222,13 +222,26 @@ public class PautaController implements PautaAPI {
 		} catch (ServiceException e) {
 			
 			logger.info("======= PautaController::ServiceException: " + e.getMessage() + "=======");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getMessage());
+			
+		}catch (WebClientResponseException e) {
+			if (e.getStatusCode().is4xxClientError()) {
+				
+				logger.info("======= PautaController::WebClientResponseException: CPF inválido: " + e.getMessage() + "=======");
+				return ResponseEntity.badRequest().body("CPF inválido: " + e.getMessage());
+			}else {
+				
+				logger.info("======= PautaController::WebClientResponseException: " + e.getMessage() + "=======");
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body("Ocorreu algum erro ao realizar o voto: "+ e.getMessage());
+			}
+			
 			
 		} catch (Exception e) {
 			
 			logger.info("======= PautaController::Exception: " + e.getMessage() + "=======");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Ocorreu algum erro ao realizar o voto: ".concat(e.getMessage()));
+					.body("Ocorreu algum erro ao realizar o voto: " + e.getMessage());
 		}
 
 	}
@@ -236,7 +249,7 @@ public class PautaController implements PautaAPI {
 
 	@Override
 	@ApiOperation("Obter o Resultado da votação de uma Pauta")
-	@GetMapping(path="/{pautaId}/votos", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path="/{pautaId}/votos")
 	public ResponseEntity<?> obterResultadoDaVotacao(@PathVariable("pautaId") Long pautaId) {
 		
 		logger.info("======= PautaController:: inicializando obterResultadoDaVotacao =======");

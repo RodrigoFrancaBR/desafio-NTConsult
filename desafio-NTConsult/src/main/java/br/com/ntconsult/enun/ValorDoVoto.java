@@ -12,12 +12,12 @@ public enum ValorDoVoto {
 		this.valorDoVoto = valorDoVoto;
 	}
 
-	public String getValorDoVoto() {
+	public String getValor() {
 		return valorDoVoto;
 	}
 
 	public static ValorDoVoto obterValorDoVotoPorUm(String valor) {
-		return Arrays.asList(ValorDoVoto.values()).parallelStream().filter(e -> e.getValorDoVoto().equals(valor))
+		return Arrays.asList(ValorDoVoto.values()).parallelStream().filter(e -> e.getValor().equals(valor))
 				.collect(Collectors.toList()).get(0);
 	}
 

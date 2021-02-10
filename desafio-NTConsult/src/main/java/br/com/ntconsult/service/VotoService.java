@@ -16,8 +16,9 @@ public class VotoService {
 		this.repository = repository;
 	}
 
-	Voto obterVotoDoAssociadoNaPauta(Long pautaId, Long associadoId) {
-		return this.repository.obterVotoDoAssociadoNaPauta(pautaId, associadoId);
+	public boolean podeVotarNessaPauta(Long pautaId, Long associadoId) {
+		Voto voto = this.obterVotoDoAssociadoNaPauta(pautaId, associadoId);
+		return (voto == null) ? true : false;
 	}
 
 	public void realizarVoto(Voto voto) {
@@ -27,4 +28,9 @@ public class VotoService {
 	public List<Voto> obterResultadoDaVotacao(Long pautaId) {
 		return repository.obterResultadoDaVotacaoPor(pautaId);
 	}
+
+	public Voto obterVotoDoAssociadoNaPauta(Long pautaId, Long associadoId) {
+		return repository.obterVotoDoAssociadoNaPauta(pautaId, associadoId);
+	}
+
 }

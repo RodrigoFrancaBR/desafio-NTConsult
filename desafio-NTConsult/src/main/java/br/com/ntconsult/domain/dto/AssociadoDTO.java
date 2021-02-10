@@ -2,33 +2,30 @@ package br.com.ntconsult.domain.dto;
 
 import java.io.Serializable;
 
+import br.com.ntconsult.enun.StatusCPF;
 import br.com.ntconsult.enun.ValorDoVoto;
 
-public class VotoDTO implements Serializable {
+public class AssociadoDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Long associadoId;
+	private String cpf;
 	private ValorDoVoto valorDoVoto;
+	private StatusCPF status;
 
-	public VotoDTO() {
+	public AssociadoDTO() {
+
 	}
 
-	public VotoDTO(Long associadoId, ValorDoVoto valorDoVoto) {
-		super();
-		this.associadoId = associadoId;
-		this.valorDoVoto = valorDoVoto;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public Long getAssociadoId() {
-		return associadoId;
-	}
-
-	public void setAssociadoId(Long associadoId) {
-		this.associadoId = associadoId;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public ValorDoVoto getValorDoVoto() {
@@ -37,6 +34,14 @@ public class VotoDTO implements Serializable {
 
 	public void setValorDoVoto(ValorDoVoto valorDoVoto) {
 		this.valorDoVoto = valorDoVoto;
+	}
+
+	public StatusCPF getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusCPF status) {
+		this.status = status;
 	}
 
 }

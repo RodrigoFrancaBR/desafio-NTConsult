@@ -1,15 +1,15 @@
 INSERT INTO TB_ASSOCIADO 
-	(nome) values
-    ('Associado_1'),
-    ('Associado_2'),
-    ('Associado_3'),
-    ('Associado_4'),
-    ('Associado_5'),
-    ('Associado_6'),
-    ('Associado_7'),
-    ('Associado_8'),
-    ('Associado_9'),
-    ('Associado_10');
+	(nome, cpf) values
+    ('Associado_1', 43075648043),
+    ('Associado_2', 76688780097),
+    ('Associado_3', 33009719000),
+    ('Associado_4', 89249648014),
+    ('Associado_5', 49692923029),
+    ('Associado_6', 18078101007),
+    ('Associado_7', 48181007069),
+    ('Associado_8', 00377064033),
+    ('Associado_9', 05437205007),
+    ('Associado_10', 98298100034);
 
     INSERT INTO TB_PAUTA 
 	(titulo, descricao) values
@@ -29,7 +29,7 @@ INSERT INTO TB_ASSOCIADO
 	dt_abertura_sessao = '2021-02-08T22:07:24.068', qt_duracao_sessao=60;
 
 	INSERT INTO TB_VOTO 
-	(pauta_id, associado_id, valor_do_voto) values
+	(pauta_id, associado_id, valor) values
     (1, 1, 'Sim'),
     (2, 1, 'Sim'),
     (3, 1, 'Sim'),

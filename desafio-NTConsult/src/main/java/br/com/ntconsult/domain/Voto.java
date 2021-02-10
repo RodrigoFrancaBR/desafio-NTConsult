@@ -2,6 +2,7 @@ package br.com.ntconsult.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,16 +32,17 @@ public class Voto implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "associado_id")
 	private Associado associado;
-
+	
+	@Column(name = "valor")
 	String valorDoVoto;
 
 	public Voto() {
 	}
 
-	public Voto(Pauta pauta, Associado associado, ValorDoVoto valor) {
+	public Voto(Pauta pauta, Associado associado, String valorDoVoto) {
 		this.pauta = pauta;
 		this.associado = associado;
-		this.valorDoVoto = valor.getValorDoVoto();
+		this.valorDoVoto = valorDoVoto;
 	}
 
 	public Long getId() {
@@ -72,7 +74,7 @@ public class Voto implements Serializable {
 	}
 
 	public void setValorDoVoto(ValorDoVoto valorDoVoto) {
-		this.valorDoVoto = valorDoVoto.getValorDoVoto();
+		this.valorDoVoto = valorDoVoto.getValor();
 	}
 
 	@Override

@@ -8,4 +8,6 @@ import br.com.ntconsult.domain.Associado;
 @Repository
 public interface AssociadoRepository extends JpaRepository<Associado, Long> {
 
+	Associado findByCpf(String cpf);
+
 }

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import br.com.ntconsult.domain.Associado;
 import br.com.ntconsult.domain.Pauta;
 import br.com.ntconsult.domain.Voto;
+import br.com.ntconsult.domain.dto.AssociadoDTO;
 import br.com.ntconsult.domain.dto.PautaDTO;
-import br.com.ntconsult.domain.dto.VotoDTO;
 import br.com.ntconsult.enun.ValorDoVoto;
 import br.com.ntconsult.exceptions.ServiceException;
 import br.com.ntconsult.repository.PautaRepository;
@@ -19,22 +19,22 @@ import br.com.ntconsult.repository.PautaRepository;
 @Service
 public class PautaService {
 
-	private PautaRepository pautaRepository;
+	private PautaRepository repository;
 	private AssociadoService associadoService;
 	private VotoService votoService;
 
-	public PautaService(PautaRepository pautaRepository, AssociadoService associadoService, VotoService votoService) {
-		this.pautaRepository = pautaRepository;
+	public PautaService(PautaRepository repository, AssociadoService associadoService, VotoService votoService) {
+		this.repository = repository;
 		this.associadoService = associadoService;
 		this.votoService = votoService;
 	}
 
 	public Collection<Pauta> obterPautas() throws ServiceException {
-		return pautaRepository.findAll();
+		return repository.findAll();
 	}
 
 	public Pauta obterPautaPorId(Long id) throws ServiceException {
-		Optional<Pauta> pauta = pautaRepository.findById(id);
+		Optional<Pauta> pauta = repository.findById(id);
 		if (pauta.isPresent()) {
 			return pauta.get();
 		} else {
@@ -48,7 +48,7 @@ public class PautaService {
 		if (!pautaEstaEmSessao(pautaEncontrada)) {
 			pautaEncontrada.setTitulo(pauta.getTitulo());
 			pautaEncontrada.setDescricao(pauta.getDescricao());
-			pautaRepository.save(pautaEncontrada);
+			repository.save(pautaEncontrada);
 		}
 
 	}
@@ -57,7 +57,7 @@ public class PautaService {
 		Pauta pautaEncontrada = obterPautaPorId(id);
 
 		if (!pautaEstaEmSessao(pautaEncontrada)) {
-			pautaRepository.delete(pautaEncontrada);
+			repository.delete(pautaEncontrada);
 		}
 	}
 
@@ -68,7 +68,7 @@ public class PautaService {
 		}
 
 		Pauta pauta = new Pauta(pautaDTO);
-		return pautaRepository.save(pauta).getId();		
+		return repository.save(pauta).getId();
 
 	}
 
@@ -84,27 +84,39 @@ public class PautaService {
 
 		pauta.setDataDeAberturaSessao(LocalDateTime.now());
 
-		return pautaRepository.save(pauta);
+		return repository.save(pauta);
 
 	}
 
-	public void votar(Long pautaId, VotoDTO votoDTO) throws ServiceException {
+	public void votar(Long pautaId, AssociadoDTO associadoDTO) throws ServiceException {
+		String valorDoVoto = associadoDTO.getValorDoVoto().getValor();
+		
+		Pauta pauta = this.obterPautaPorId(pautaId);
 
-		Pauta pauta = obterPautaPorId(pautaId);
-
-		Associado associado = associadoService.obterAssociadoPorId(votoDTO.getAssociadoId());
-
-		if (!podeVotarNessaPauta(pauta.getId(), associado.getId())) {
-			throw new ServiceException("Associado: " + associado.getId() + " já votou na sessao: " + pauta.getId());
+		Associado associado = associadoService.obterAssociadoPorCPF(associadoDTO.getCpf());
+		
+		if (associado==null) {
+			throw new ServiceException("Não foi encontrado nenhum CPF com o número: " + associadoDTO.getCpf());
 		}
 
-		Voto voto = new Voto(pauta, associado, votoDTO.getValorDoVoto());
+		boolean podeVotarNessaPauta = votoService.podeVotarNessaPauta(pautaId, associado.getId());
 
-		if (sessaoEstaAberta(pauta)) {
-			votoService.realizarVoto(voto);
-		} else {
+		if (!podeVotarNessaPauta) {
+			throw new ServiceException("Associado: " + associado.getId() + " já votou na sessao: " + pautaId);
+		}
+
+		if (!associadoService.cpfValido(associado.getCpf())) {
+			throw new ServiceException("Associado: Unable to vote!");
+		}
+
+		Voto voto = new Voto(pauta, associado, valorDoVoto);		
+
+		if (!sessaoEstaAberta(pauta)) {
 			throw new ServiceException("A Sessao já está Encerrada");
+		} else {
+			votoService.realizarVoto(voto);
 		}
+
 	}
 
 	public PautaDTO obterResultadoDaVotacao(Long pautaId) throws ServiceException {
@@ -126,16 +138,7 @@ public class PautaService {
 
 		return new PautaDTO(pauta, totalDeVotos, totalDeVotosSIM, totalDeVotosNAO);
 	}
-
-	private boolean podeVotarNessaPauta(Long pautaId, Long associadoId) {
-		Voto voto = votoService.obterVotoDoAssociadoNaPauta(pautaId, associadoId);
-		if (voto == null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
+	
 	private boolean sessaoEstaAberta(Pauta pauta) {
 
 		LocalDateTime dataAberturaSessao = pauta.getDataDeAberturaSessao();
