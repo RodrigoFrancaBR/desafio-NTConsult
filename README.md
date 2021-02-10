@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://desafiontconsult.herokuapp.com/swagger-ui.html#/">
+  <a href="https://ntconsult-api.herokuapp.com/swagger-ui.html#/">
     <img src="https://github.com/RodrigoFrancaBR/desafio-NTConsult/blob/main/assets/urn.png" height="150" width="175" alt="Logo do SGSV" />
   </a>
 </p>
